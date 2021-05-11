@@ -17,7 +17,7 @@ public class SampleRouterFunction {
     @Bean
     public RouterFunction<ServerResponse> fluxStreamRoute(FluxSampleHandler fluxSampleHandler){
 
-        return RouterFunctions.route(GET("/route/fluxStringStream").and(accept(MediaType.APPLICATION_JSON)), fluxSampleHandler::fluxStringStream)
+        return RouterFunctions.route(GET("/route/fluxStringStream").and(accept(MediaType.TEXT_PLAIN)), fluxSampleHandler::fluxStringStream)
                 .andRoute(GET("/route/fluxIntStream").and(accept(MediaType.APPLICATION_JSON)), fluxSampleHandler::fluxIntStream);
     }
 }

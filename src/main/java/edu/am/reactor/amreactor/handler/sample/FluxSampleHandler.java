@@ -14,7 +14,7 @@ public class FluxSampleHandler {
 
         Flux<String> stringStream = Flux.just("A","B","C","D");
         return ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.TEXT_PLAIN)
                 .body(stringStream, String.class);
     }
 
