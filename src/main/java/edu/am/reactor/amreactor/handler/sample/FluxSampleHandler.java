@@ -1,6 +1,7 @@
 package edu.am.reactor.amreactor.handler.sample;
 
 import org.springframework.http.MediaType;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -34,7 +35,7 @@ public class FluxSampleHandler {
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(stringStream.collectList(), List.class);
-
+                //Collect all elements emitted by this Flux into a List that is emitted by the resulting Mono when this sequence completes.
         // Returns: ["A","B","C","D"]
     }
 
