@@ -16,7 +16,7 @@ public class AccountsDocument {
 
     @Id
     String id;
-    int AccountId;
+    int accountId;
     int limit;
     List<String> products;
 }
