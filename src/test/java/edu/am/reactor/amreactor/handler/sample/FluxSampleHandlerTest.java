@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -58,8 +59,8 @@ public class FluxSampleHandlerTest {
             //    .getResponseBody();     // Return the response body as a Flux<T> of decoded elements.
                 .expectBodyList(String.class)
                 .consumeWith((response) -> {
-                    System.out.println(response.getResponseBody().get(0));
-                    assertThat(response.getResponseBody().get(0).contains("A"));
+                    //System.out.println(Objects.requireNonNull(response.getResponseBody()).get(0));
+                    assertThat(Objects.requireNonNull(response.getResponseBody()).get(0).contains("A"));
                 });
 
 /*
