@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
@@ -15,6 +16,8 @@ import java.util.List;
 
 @DataMongoTest
 @RunWith(SpringRunner.class)
+// Test annotation which indicates that the ApplicationContext associated with a test is dirty and should therefore be closed and removed from the context cache.
+@DirtiesContext // Required to have a different context of  AccountsRepository for each testcase
 public class AccountsRepositoryTest {
 
     @Autowired
