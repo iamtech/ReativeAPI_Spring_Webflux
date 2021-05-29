@@ -4,11 +4,9 @@ import edu.am.reactor.amreactor.document.AccountsDocument;
 import edu.am.reactor.amreactor.repository.AccountsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -37,5 +35,30 @@ public class AccountsController {
 
     /*    Output:
         {"id":"5ca4bbc7a2dd94ee5816239a","accountId":370583,"limit":10000,"products":["Brokerage","Commodity","InvestmentStock"]}*/
+    }
+
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<AccountsDocument> addAccount(@RequestBody AccountsDocument accountsDocument){
+        return accountsRepository.save(accountsDocument);
+    }
+
+
+    @DeleteMapping(value = "/delete/{id}")
+    public Mono<Void> deleteAccount(@PathVariable int id){
+        return accountsRepository.deleteByAccountId(id);
+    }
+
+
+    @PutMapping(value = "/update/{id}")
+    public Mono<ResponseEntity> updateAccount(@PathVariable int id, @RequestBody AccountsDocument accountsDocument){
+        return accountsRepository.findByAccountId(accountsDocument.getAccountId())
+                .flatMap(dbDocument -> {
+                    dbDocument.setLimit(accountsDocument.getLimit());
+                    dbDocument.setProducts(accountsDocument.getProducts());
+                    return accountsRepository.save(dbDocument);  })
+                .map((updatedAccounts) -> new ResponseEntity(updatedAccounts, HttpStatus.ACCEPTED))
+                .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
     }
 }

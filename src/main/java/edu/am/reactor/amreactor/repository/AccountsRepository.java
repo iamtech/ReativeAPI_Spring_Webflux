@@ -12,4 +12,6 @@ public interface AccountsRepository extends ReactiveMongoRepository<AccountsDocu
     Flux<AccountsDocument> findByProductsContaining(String product);
 
     Mono<AccountsDocument> findByAccountId(int accountId);
+
+    Mono<Void> deleteByAccountId(int accountId);
 }
