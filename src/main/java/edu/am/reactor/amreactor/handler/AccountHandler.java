@@ -56,7 +56,7 @@ public class AccountHandler {
                 });
 
         return updatedAccount.flatMap(account ->
-                ServerResponse.ok()
+                ServerResponse.accepted()
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(fromValue(account)))
                 .switchIfEmpty(notFound);
