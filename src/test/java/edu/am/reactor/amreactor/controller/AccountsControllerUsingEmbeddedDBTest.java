@@ -40,6 +40,7 @@ public class AccountsControllerUsingEmbeddedDBTest {
         accountsData.add(new AccountsDocument(null, 371138, 9000, List.of("Derivatives", "InvestmentStock")));
         accountsData.add(new AccountsDocument(null, 353465, 10000, List.of("CurrencyService", "InvestmentStock")));
         accountsData.add(new AccountsDocument(null, 785786, 10000, List.of("Derivatives", "InvestmentStock", "InvestmentFund", "CurrencyService")));
+        accountsData.add(new AccountsDocument(null, 12345, 700, List.of("Prod11","Prod21")));
 
         accountsRepository.deleteAll()
                 .thenMany(Flux.fromIterable(accountsData))
@@ -63,7 +64,7 @@ public class AccountsControllerUsingEmbeddedDBTest {
                 .value((response) -> {
                     response.forEach(System.out::println);
                 })
-                .hasSize(4);
+                .hasSize(5);
     }
 
     @Test
@@ -78,5 +79,34 @@ public class AccountsControllerUsingEmbeddedDBTest {
                 .expectStatus().isCreated()
                 .expectBody()
                 .jsonPath("$.accountId", 1234);
+    }
+
+    @Test
+    public void deleteAccountTest(){
+
+        webTestClient.delete()
+                .uri("/accounts/delete/{id}",12345)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Void.class);
+    }
+
+
+    @Test
+    public void updateAccountTest() {
+
+        List<String> productsList = List.of("Prod1Derivatives","Prod2InvestmentStock");
+        AccountsDocument updatedAccount = new AccountsDocument(null, 12345, 775, productsList);
+        webTestClient.put()
+                .uri("/accounts/update/{id}",12345)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(updatedAccount),AccountsDocument.class)
+                .exchange()
+                .expectStatus().isAccepted()
+                .expectBody()
+                .jsonPath("$.limit").isEqualTo(775)
+                .jsonPath("$.products",productsList);
     }
 }
